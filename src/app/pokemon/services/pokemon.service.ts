@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { concat, Observable, of, throwError } from 'rxjs';
 import { catchError, mergeMap, pluck } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.prod';
 import { PokemonData, Type } from '../interfaces/pokemon.interface';
 import { PokemonTypeData } from '../interfaces/pokemon.types.interface';
 
