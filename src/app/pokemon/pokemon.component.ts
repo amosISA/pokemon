@@ -1,17 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { PokemonService } from './services/pokemon.service';
 import { Pokemon, PokemonType, PokemonTypeData } from './interfaces/pokemon.types.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pokemon',
   templateUrl: './pokemon.component.html',
   styleUrls: []
 })
-export class PokemonComponent {
+export class PokemonComponent implements OnDestroy {
 
     pokemonTypes: PokemonType[] = [];
+    subscription: Subscription = new Subscription();
     pokemonForm: FormGroup;
 
     constructor(
@@ -30,9 +32,13 @@ export class PokemonComponent {
             }
         });
     }
+    
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
+    }
 
     loadPokemonData(nombrePokemon: string): void {
-        this._pokemonService.getPokemonData(nombrePokemon).subscribe((response: PokemonTypeData) => {
+        this.subscription = this._pokemonService.getPokemonData(nombrePokemon).subscribe((response: PokemonTypeData) => {
             if (response) {
                 this.pokemonTypes.push({
                     type: response.name,
