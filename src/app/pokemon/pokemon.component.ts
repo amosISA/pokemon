@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
 export class PokemonComponent implements OnDestroy {
 
     pokemonTypes: PokemonType[] = [];
-    subscription: Subscription = new Subscription();
+    pokemonSubscription: Subscription = new Subscription();
     pokemonForm: FormGroup;
 
     constructor(
@@ -23,6 +23,14 @@ export class PokemonComponent implements OnDestroy {
         this.pokemonForm = this._fb.group({
             pokemon: [null]
         });
+        this.initForm();
+    }
+    
+    ngOnDestroy(): void {
+        this.pokemonSubscription.unsubscribe();
+    }
+
+    initForm(): void {
         this.pokemonForm.get('pokemon')?.valueChanges.pipe(
             debounceTime(500),
             distinctUntilChanged()
@@ -32,13 +40,9 @@ export class PokemonComponent implements OnDestroy {
             }
         });
     }
-    
-    ngOnDestroy(): void {
-        this.subscription.unsubscribe();
-    }
 
     loadPokemonData(nombrePokemon: string): void {
-        this.subscription = this._pokemonService.getPokemonData(nombrePokemon).subscribe((response: PokemonTypeData) => {
+        this.pokemonSubscription = this._pokemonService.getPokemonData(nombrePokemon).subscribe((response: PokemonTypeData) => {
             if (response) {
                 this.pokemonTypes.push({
                     type: response.name,
