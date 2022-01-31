@@ -1,0 +1,17 @@
+<div>
+    <form [formGroup]="pokemonForm">
+        <p>Introduce un nombre de POKEMON:</p>
+        <input type="text" formControlName="pokemon">
+    </form>
+
+    <div *ngIf="pokemonTypes && pokemonTypes.length > 0">
+        <h1>Types of POKEMONS found: {{ pokemonTypes.length }}</h1>
+        <ng-container *ngFor="let type of pokemonTypes">
+            <h2>{{ type.type }}</h2>
+            <ul>
+                <li *ngFor="let pokemon of type.pokemons">{{ pokemon }}</li>
+            </ul>
+        </ng-container>
+    </div>
+    <ul></ul>
+</div>
